@@ -8,7 +8,7 @@ namespace ConsoleCSOM.Models
 {
     public class ItemList
     {
-        public ItemList(string title, string? about, string city)
+        public ItemList(string title, string about, string city)
         {
             Title = title;
             About = about;
@@ -16,7 +16,7 @@ namespace ConsoleCSOM.Models
         }
 
         public string Title { get; set; }
-        public string? About { get; set; }
+        public string About { get; set; }
         public string City { get; set; }
     }
 }
