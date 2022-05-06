@@ -7,6 +7,9 @@ using Microsoft.SharePoint.Client.Taxonomy;
 using ConsoleCSOM.Helpers;
 using System.Collections.Generic;
 using ConsoleCSOM.Models;
+using System.Text;
+using System.IO;
+using File = Microsoft.SharePoint.Client.File;
 
 namespace ConsoleCSOM
 {
@@ -29,11 +32,17 @@ namespace ConsoleCSOM
                     ClientContext ctx = GetContext(clientContextHelper);
                     ctx.Load(ctx.Web);
                     await ctx.ExecuteQueryAsync();
-                    //await CreateList(ctx);
-                    //await CreateTermGroup(ctx);
-                    //await CreateTermSet(ctx);
-                    //await CreateTerm(ctx);
-                    //await CreateField(ctx);
+
+                    //await CreateGenericList(ctx, "CSOM Test");
+                    //await CreateTermGroup(ctx, "CSOM-Test");
+                    //await CreateTermSet(ctx, "CSOM-Test", "city-NguyenAnhTu");
+
+                    //List<string> termList = new List<string> { "Ho Chi Minh", "Stockholm" };
+                    //await CreateTerm(ctx, "CSOM-Test", "city-NguyenAnhTu", termList);
+
+                    //await CreateSiteField(ctx, "About", "About", "CSOM Test Group", "Text");
+                    //await CreateSiteField(ctx, "City", "City", "CSOM Test Group", "TaxonomyFieldType");
+
                     //await CreateContentTypes(ctx);
                     //await AddContentTypeToList(ctx);
                     //await AddItemToList(ctx);
@@ -44,7 +53,19 @@ namespace ConsoleCSOM
                     //await UpdateList(ctx);
                     //await AddAuthorToSCOMList(ctx);
                     //await CreateCitiesField(ctx);
-                    await AddListWithCitiesField(ctx);
+                    //await AddListWithCitiesField(ctx);
+                    //await AddNewCitiesItems(ctx);
+                    //await CreateListDocument(ctx, "Document Test", "Document Libaries");
+                    //await AddContentTypeToDocumentList(ctx);
+                    //await AddFolder(ctx, "Document Test", "Folder 1");
+                    //await AddSubFolder(ctx, "Document Test", "Folder 1", "Folder 2");
+                    //await AddItemsInDocumentLib(ctx);
+
+                    //List<string> folderList = new List<string> { "Folder_Test_1", "Folder_Test_2", "Folder_Test_3" };
+                    //await AddFoldersInDocumentLib(ctx, "Document Test", "Folder 1", "Folder 2", folderList);
+                    //await GetAllListItemInFolder(ctx, "Document Test", "Folder 1", "Folder 2");
+
+                    await UploadFile(ctx, "Document Test", "D:/download.png");
                     Console.WriteLine($"Site {ctx.Web.Title}");
                 }
                 Console.WriteLine($"Press Any Key To Stop!");
@@ -64,11 +85,11 @@ namespace ConsoleCSOM
             return clientContextHelper.GetContext(new Uri(info.SiteUrl), info.Username, info.Password);
         }
 
-        private static async Task CreateList(ClientContext ctx)
+        private static async Task CreateGenericList(ClientContext ctx, string listName)
         {
             ListCreationInformation creationInfo = new ListCreationInformation();
-            creationInfo.Title = "CSOM Test";
-            creationInfo.Description = "List for CSOM Test";
+            creationInfo.Title = listName;
+            creationInfo.Description = $"List for {listName}";
             creationInfo.TemplateType = (int)ListTemplateType.GenericList;
             List newList = ctx.Web.Lists.Add(creationInfo);
             ctx.Load(newList);
@@ -76,9 +97,9 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task CreateTermGroup(ClientContext ctx)
+        private static async Task CreateTermGroup(ClientContext ctx, string groupName)
         {
-            string termGroupName = "CSOM-Test";
+            string termGroupName = groupName;
             TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
             TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
             //Create Term Group
@@ -88,36 +109,47 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task CreateTermSet(ClientContext ctx)
+        private static async Task CreateTermSet(ClientContext ctx, string groupName, string setName)
         {
             TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
             TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
             //Create Term Set
-            TermGroup termGroup = termStore.Groups.GetByName("CSOM-Test");
-            TermSet termSet = termGroup.CreateTermSet("city-NguyenAnhTu", Guid.NewGuid(), Constants.LCID_ENGLISH);
-            // Execute the query to the server.
-            await ctx.ExecuteQueryAsync();
-        }
-        private static async Task CreateTerm(ClientContext ctx)
-        {
-            TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
-            TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
-            //Get Term Group & Term Set
-            TermGroup termGroup = termStore.Groups.GetByName("CSOM-Test");
-            TermSet termSet = termGroup.TermSets.GetByName("city-NguyenAnhTu");
-            //Create new Term
-            Term hcmTerm = termSet.CreateTerm("Ho Chi Minh", Constants.LCID_ENGLISH, Guid.NewGuid());
-            Term stockHolmTerm = termSet.CreateTerm("Stockholm", Constants.LCID_ENGLISH, Guid.NewGuid());
+            TermGroup termGroup = termStore.Groups.GetByName(groupName);
+            TermSet termSet = termGroup.CreateTermSet(setName, Guid.NewGuid(), Constants.LCID_ENGLISH);
             // Execute the query to the server.
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task CreateField(ClientContext ctx)
+        private static async Task CreateTerm(ClientContext ctx, string groupName, string setName, List<string> termList)
         {
-            //Create About (Text) Field
-            ctx.Site.RootWeb.Fields.AddFieldAsXml("<Field DisplayName='About' Name='About' Group='CSOM Test Group' Type='Text' />", false, AddFieldOptions.AddFieldInternalNameHint);
-            //Create City (TaxonomyFieldType) Field
-            ctx.Site.RootWeb.Fields.AddFieldAsXml("<Field DisplayName='City' Name='City' Group='CSOM Test Group' Type='TaxonomyFieldType' />", false, AddFieldOptions.AddFieldInternalNameHint);
+            TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
+            TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
+            //Get Term Group & Term Set
+            TermGroup termGroup = termStore.Groups.GetByName(groupName);
+            TermSet termSet = termGroup.TermSets.GetByName(setName);
+            //Create new Term
+            foreach (string termName in termList)
+            {
+                Term newTerm = termSet.CreateTerm(termName, Constants.LCID_ENGLISH, Guid.NewGuid());
+            }
+            // Execute the query to the server.
+            await ctx.ExecuteQueryAsync();
+        }
+
+        //private static async Task CreateSiteField(ClientContext ctx, string displayName, string groupName, string type)
+        //{
+        //    //Create About (Text) Field
+        //    ctx.Site.RootWeb.Fields.AddFieldAsXml("<Field DisplayName='About' Name='About' Group='CSOM Test Group' Type='Text' />", false, AddFieldOptions.AddFieldInternalNameHint);
+        //    //Create City (TaxonomyFieldType) Field
+        //    ctx.Site.RootWeb.Fields.AddFieldAsXml("<Field DisplayName='City' Name='City' Group='CSOM Test Group' Type='TaxonomyFieldType' />", false, AddFieldOptions.AddFieldInternalNameHint);
+        //    await ctx.ExecuteQueryAsync();
+        //}
+
+        private static async Task CreateSiteField(ClientContext ctx, string displayName, string name, string groupName, string type)
+        {
+            // For Text Field Type is Text
+            // For Taxonomy Field is TaxonomyFieldType
+            ctx.Site.RootWeb.Fields.AddFieldAsXml($"<Field DisplayName='{displayName}' Name='{name}' Group='{groupName}' Type='{type}' />", false, AddFieldOptions.AddFieldInternalNameHint);
             await ctx.ExecuteQueryAsync();
         }
 
@@ -230,15 +262,17 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
 
             //Get All Terms
-            // Get the TaxonomySession
-            TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
-            // Get the term store by name
-            TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
-            // Get the term group by Name
-            TermGroup termGroup = termStore.Groups.GetByName("CSOM-Test");
-            // Get the term set by Name
-            TermSet termSet = termGroup.TermSets.GetByName("city-NguyenAnhTu");
-            var term = termSet.Terms.GetByName("Ho Chi Minh");
+            //// Get the TaxonomySession
+            //TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
+            //// Get the term store by name
+            //TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
+            //// Get the term group by Name
+            //TermGroup termGroup = termStore.Groups.GetByName("CSOM-Test");
+            //// Get the term set by Name
+            //TermSet termSet = termGroup.TermSets.GetByName("city-NguyenAnhTu");
+
+            TermCollection terms = await CsomTermSetAsync(ctx, "CSOM-Test", "city-NguyenAnhTu");
+            var term = terms.GetByName("Ho Chi Minh");
             ctx.Load(term);
             await ctx.ExecuteQueryAsync();
 
@@ -352,7 +386,7 @@ namespace ConsoleCSOM
 
         private static async Task SimpleCamlQueryAsync(ClientContext ctx)
         {
-            var list = ctx.Web.Lists.GetByTitle("Documents");
+            var list = ctx.Web.Lists.GetByTitle("Document Test");
 
             var allItemsQuery = CamlQuery.CreateAllItemsQuery();
             var allFoldersQuery = CamlQuery.CreateAllFoldersQuery();
@@ -365,10 +399,9 @@ namespace ConsoleCSOM
                                 </Query>
                                 <RowLimit>20</RowLimit>
                             </View>",
-                FolderServerRelativeUrl = "/sites/test-site-duc-11111/Shared%20Documents/2"
+                FolderServerRelativeUrl = "/sites/PrecioFishbone/Document%20Test/Folder%201/Folder%202"
                 //example for site: https://omniapreprod.sharepoint.com/sites/test-site-duc-11111/
             });
-
             ctx.Load(items);
             await ctx.ExecuteQueryAsync();
         }
@@ -513,34 +546,265 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task AddListWithCitiesField(ClientContext ctx)
+        private static async Task AddNewCitiesItems(ClientContext ctx)
         {
-            //Get All Terms
+            // Get Terms Collection
+            TermCollection terms = await CsomTermSetAsync(ctx, "CSOM-Test", "city-NguyenAnhTu");
+
+            // Get the List, List Item and Field
+            List targetList = ctx.Web.Lists.GetByTitle("CSOM Test");
+            string[] termValuesarrary;
+            List<string> termValues = new List<string>();
+
+            foreach (Term term in terms)
+            {
+                TaxonomyFieldValue txFieldValue = new TaxonomyFieldValue();
+                txFieldValue.TermGuid = term.Id.ToString();
+                txFieldValue.Label = term.Name;
+                termValues.Add("-1;#" + txFieldValue.Label + "|" + txFieldValue.TermGuid);
+            }
+            termValuesarrary = termValues.ToArray();
+            string termValuesstring = string.Join(";#", termValuesarrary);
+            Console.WriteLine(termValuesstring);
+
+            //Add New Items
+            for (int i = 1; i <= 3; i++)
+            {
+                ListItemCreationInformation iteminfo = new ListItemCreationInformation();
+                ListItem newListItem = targetList.AddItem(iteminfo);
+                newListItem["Title"] = "Test " + DateTime.Now.ToString();
+                newListItem["Cities"] = termValuesstring;
+                newListItem.Update();
+                ctx.ExecuteQuery();
+            }
+
+        }
+
+        private static async Task<TermCollection> CsomTermSetAsync(ClientContext ctx, string termStoreName, string termSetName)
+        {
             // Get the TaxonomySession
             TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
             // Get the term store by name
             TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
             // Get the term group by Name
-            TermGroup termGroup = termStore.Groups.GetByName("CSOM-Test");
+            TermGroup termGroup = termStore.Groups.GetByName(termStoreName);
             // Get the term set by Name
-            TermSet termSet = termGroup.TermSets.GetByName("city-NguyenAnhTu");
+            TermSet termSet = termGroup.TermSets.GetByName(termSetName);
             var terms = termSet.GetAllTerms();
             ctx.Load(terms);
             await ctx.ExecuteQueryAsync();
-            List targetList = ctx.Web.Lists.GetByTitle("CSOM Test");
-            for(int i = 1; i <= 3; i++)
+            return terms;
+        }
+
+        private static async Task CreateListDocument(ClientContext ctx, string listName, string description)
+        {
+            List newList = ctx.Web.Lists.Add(new ListCreationInformation()
             {
-                ListItemCreationInformation iteminfo = new ListItemCreationInformation();
-                ListItem newListItem = targetList.AddItem(iteminfo);
-                newListItem["Title"] = "Test " + DateTime.Now.ToString();
-                foreach(Term term in terms)
-                {
-                    newListItem["Cities"] = term.Name;
-                }
-                newListItem.Update();
-                ctx.ExecuteQuery();
-            }
+                Title = listName,
+                Description = description,
+                TemplateType = (int)ListTemplateType.DocumentLibrary,
+            });
+            ctx.Load(newList);
+            // Execute the query to the server.
             await ctx.ExecuteQueryAsync();
         }
+
+
+        private static async Task AddContentTypeToDocumentList(ClientContext ctx)
+        {
+            // Get all the content types from current site
+            ContentTypeCollection contentTypeCollection = ctx.Site.RootWeb.ContentTypes;
+            ctx.Load(contentTypeCollection);
+            await ctx.ExecuteQueryAsync();
+            //Add Content Type To List
+            ContentType targetContentType = (from contentType in contentTypeCollection where contentType.Name == "CSOM Test Content Type" select contentType).FirstOrDefault();
+            List targetList = ctx.Web.Lists.GetByTitle("Document Test");
+            targetList.ContentTypes.AddExistingContentType(targetContentType);
+            targetList.Update();
+            ctx.Web.Update();
+            await ctx.ExecuteQueryAsync();
+        }
+
+        private static async Task AddFolder(ClientContext ctx, string listName, string folderName)
+        {
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
+
+            //Enable Folder creation for the list
+            targetList.EnableFolderCreation = true;
+            targetList.Update();
+            ctx.ExecuteQuery();
+
+            //To create the folder
+            ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+            itemCreateInfo.UnderlyingObjectType = FileSystemObjectType.Folder;
+            itemCreateInfo.LeafName = folderName;
+
+            ListItem newItem = targetList.AddItem(itemCreateInfo);
+            newItem["Title"] = folderName;
+            newItem.Update();
+            await ctx.ExecuteQueryAsync();
+        }
+
+        private static async Task AddSubFolder(ClientContext ctx, string listName, string parentFolder, string subFolderName)
+        {
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
+            ctx.Load(targetList);
+            await ctx.ExecuteQueryAsync();
+
+            var folders = targetList.RootFolder.Folders;
+            ctx.Load(folders);
+            await ctx.ExecuteQueryAsync();
+
+            foreach (Folder folder in folders)
+            {
+                if (folder.Name == parentFolder)
+                {
+                    Folder resultFolder = folder.Folders.Add(subFolderName);
+                    resultFolder.Update();
+                    await ctx.ExecuteQueryAsync();
+                }
+            }
+        }
+
+        private static async Task AddItemsInDocumentLib(ClientContext ctx)
+        {
+            //Get List
+            List targetList = ctx.Web.Lists.GetByTitle("Document Test");
+            var folders = targetList.RootFolder.Folders;
+            ctx.Load(folders);
+            ctx.ExecuteQuery();
+
+            var targetFolder = folders.Where(x => x.Name == "Folder 1").FirstOrDefault().Folders;
+            ctx.Load(targetFolder);
+            ctx.ExecuteQuery();
+            for (int i = 1; i <= 3; i++)
+            {
+                FileCreationInformation createFile = new FileCreationInformation();
+                createFile.Url = "Item_" + i + ".txt";
+                //use byte array to set content of the file
+                string contentTxt = "Test Creating Content for txt File";
+                byte[] toBytes = Encoding.ASCII.GetBytes(contentTxt);
+                createFile.Content = toBytes;
+                File addedFile = targetFolder.Where(x => x.Name == "Folder 2").FirstOrDefault().Files.Add(createFile);
+                ListItem item = addedFile.ListItemAllFields;
+                item["About"] = "Folder Test";
+                item.Update();
+                ctx.ExecuteQuery();
+            }
+        }
+
+        private static async Task AddFoldersInDocumentLib(ClientContext ctx, string docLibName, string parentFolder, string subFolder, List<string> folderNames)
+        {
+            //Get List
+            List targetList = ctx.Web.Lists.GetByTitle(docLibName);
+            var folders = targetList.RootFolder.Folders;
+            ctx.Load(folders);
+            ctx.ExecuteQuery();
+
+            var targetFolder = folders.Where(x => x.Name == parentFolder).FirstOrDefault().Folders;
+            ctx.Load(targetFolder);
+            ctx.ExecuteQuery();
+            foreach (var item in folderNames)
+            {
+                Folder resultFolder = targetFolder.Where(x => x.Name == subFolder).FirstOrDefault().Folders.Add(item);
+                ListItem folder = resultFolder.ListItemAllFields;
+                folder["About"] = "Folder Test";
+                folder.Update();
+                await ctx.ExecuteQueryAsync();
+            }
+        }
+
+        private static async Task AddItemsWithCitiesInDocumentLib(ClientContext ctx)
+        {
+            //Get List
+            List targetList = ctx.Web.Lists.GetByTitle("Document Test");
+            var folders = targetList.RootFolder.Folders;
+            ctx.Load(folders);
+            ctx.ExecuteQuery();
+
+            var targetFolder = folders.Where(x => x.Name == "Folder 1").FirstOrDefault().Folders;
+            ctx.Load(targetFolder);
+            ctx.ExecuteQuery();
+
+            TermCollection terms = await CsomTermSetAsync(ctx, "CSOM-Test", "city-NguyenAnhTu");
+            Term stockHolmTerm = terms.GetByName("Stockholm");
+            ctx.Load(stockHolmTerm);
+            ctx.ExecuteQuery();
+
+            TaxonomyFieldValue txFieldValue = new TaxonomyFieldValue();
+            txFieldValue.TermGuid = stockHolmTerm.Id.ToString();
+            txFieldValue.Label = stockHolmTerm.Name;
+            string termValues = "-1;#" + txFieldValue.Label + "|" + txFieldValue.TermGuid;
+
+            Console.WriteLine(termValues);
+
+            for (int i = 1; i <= 2; i++)
+            {
+                FileCreationInformation createFile = new FileCreationInformation();
+                createFile.Url = "File_" + i + ".txt";
+                //use byte array to set content of the file
+                string contentTxt = "Test Creating Content for txt File";
+                byte[] toBytes = Encoding.ASCII.GetBytes(contentTxt);
+                createFile.Content = toBytes;
+                File addedFile = targetFolder.Where(x => x.Name == "Folder 2").FirstOrDefault().Files.Add(createFile);
+                ListItem item = addedFile.ListItemAllFields;
+                item["Cities"] = termValues;
+                item.Update();
+                ctx.ExecuteQuery();
+            }
+        }
+
+        private static async Task GetAllListItemInFolder(ClientContext ctx, string listName, string parentFolder, string targetFolder)
+        {
+            List targetList = ctx.Web.Lists.GetByTitle("Document Test");
+
+            var results = new Dictionary<string, IEnumerable<File>>();
+            ctx.Load(targetList);
+            ctx.ExecuteQuery();
+
+            var items = targetList.GetItems(new CamlQuery
+            {
+                ViewXml = "<View Scope=\"RecursiveAll\"><Query><Where><Eq><FieldRef Name=\"FSObjType\" /><Value Type=\"Integer\">0</Value></Eq></Where></Query></View>",
+                FolderServerRelativeUrl = $"/sites/PrecioFishbone/{listName}/{parentFolder}/{targetFolder}"
+            });
+            ctx.Load(items, icol => icol.Include(i => i.File));
+            results[targetList.Title] = items.Select(i => i.File);
+
+            ctx.ExecuteQuery();
+
+            //Print results
+            foreach (var result in results)
+            {
+                foreach (var file in result.Value)
+                {
+                    Console.WriteLine("File: {0}", file.Name);
+                }
+            }
+
+        }
+
+        private static async Task UploadFile(ClientContext ctx, string listName, string fileUpload)
+        {
+            if (!System.IO.File.Exists(fileUpload))
+                throw new FileNotFoundException("File not found.", fileUpload);
+
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
+
+            // Prepare to upload
+            String fileName = System.IO.Path.GetFileName(fileUpload);
+            FileStream fileStream = System.IO.File.OpenRead(fileUpload);
+
+            FileCreationInformation file = new FileCreationInformation();
+            file.Overwrite = true;
+            file.ContentStream = fileStream;
+            file.Url = fileName;
+
+            // Upload document
+            File newFile = targetList.RootFolder.Files.Add(file);
+            ctx.Load(newFile);
+            targetList.Update();
+            await ctx.ExecuteQueryAsync();
+        }
+
     }
 }
