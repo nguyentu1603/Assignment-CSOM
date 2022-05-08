@@ -33,39 +33,94 @@ namespace ConsoleCSOM
                     ctx.Load(ctx.Web);
                     await ctx.ExecuteQueryAsync();
 
+                    //// Create: a List name “CSOM Test”
                     //await CreateGenericList(ctx, "CSOM Test");
+
+                    //// Create: Term Set city-NguyenAnhTu and 2 Term Ho Chi Minh and Stockholm
                     //await CreateTermGroup(ctx, "CSOM-Test");
                     //await CreateTermSet(ctx, "CSOM-Test", "city-NguyenAnhTu");
-
                     //List<string> termList = new List<string> { "Ho Chi Minh", "Stockholm" };
                     //await CreateTerm(ctx, "CSOM-Test", "city-NguyenAnhTu", termList);
 
+                    //// Create: SiteField About (Text) and City (Taxonomy Field)
                     //await CreateSiteField(ctx, "About", "About", "CSOM Test Group", "Text");
                     //await CreateSiteField(ctx, "City", "City", "CSOM Test Group", "TaxonomyFieldType");
 
-                    //await CreateContentTypes(ctx);
-                    //await AddContentTypeToList(ctx);
-                    //await AddItemToList(ctx);
-                    //await UpdateAboutField(ctx);
-                    //await UpdateCityField(ctx);
-                    //await CAMLQueryAsync(ctx);
-                    //await ListViewCSOMOrder(ctx);
-                    //await UpdateList(ctx);
+                    //// Create: ContentType and Add Site Field 
+                    //await CreateContentTypes(ctx, "CSOM Test Content Type", "CSOM Test Content Types");
+                    //List<string> siteField = new List<string> { "About", "City" };
+                    //await AddSiteFieldToContentType(ctx, "CSOM Test Content Type", siteField);
+
+                    //// Add: Content Type To List and Set Default Content Type
+                    //await AddContentTypeToList(ctx, "CSOM Test Content Type", "CSOM Test");
+                    //await SetDefaultContentTypeInList(ctx, "CSOM Test Content Type", "CSOM Test");
+
+                    //// Add: 5 Item To List
+                    //List<ItemList> csomList = new List<ItemList>();
+                    //csomList.Add(new ItemList("Test 1", "About 1", "City 1"));
+                    //csomList.Add(new ItemList("Test 2", "About 2", "City 2"));
+                    //csomList.Add(new ItemList("Test 3", "About 3", "City 3"));
+                    //csomList.Add(new ItemList("Test 4", "About 4", "City 4"));
+                    //csomList.Add(new ItemList("Test 5", "About 5", "City 5"));
+                    //await AddItemToList(ctx, "CSOM Test", csomList);
+
+                    //// Update: Set Default Value "about default" for About
+                    //await UpdateDefaultValueFieldTypeText(ctx, "About", "about default");
+                    //AddTwoNewItems(ctx);
+
+                    //// Set Default Value "Ho Chi Minh" for City
+                    //await SetTermSetForTaxonomyField(ctx, "City", "city-NguyenAnhTu");
+                    //await SetDefaultValueForTaxonomyField(ctx, "City", "CSOM-Test", "city-NguyenAnhTu", "Ho Chi Minh");
+                    //AddTwoNewItems(ctx);
+
+                    //// CAML Query to get list items where field “about” is not “about default”
+                    //await CAMLQueryAsync(ctx, "CSOM Test");
+
+                    //// Create: List View Order Newest Items where City is Ho Chi Minh, View Fields: Id, Name, City, About
+                    //string[] viewFields = new String[] { "ID", "Title", "City", "About" };
+                    //await ListViewCSOMOrder(ctx, "CSOM Test", "CSOM Order", viewFields);
+
+                    // Update: Update every 2 items every time and Update field "about" which have value "about default" to "Update Script"
+                    //await UpdateListItem(ctx, "CSOM Test");
+
+                    //// Create new field “author” type people in list “CSOM Test”
+                    //// then migrate all list items to set user admin to field “CSOM Test Author”
                     //await AddAuthorToSCOMList(ctx);
+
+                    //// Create Taxonomy Field which allow multi values, with name “cities” map to your termset.
                     //await CreateCitiesField(ctx);
-                    //await AddListWithCitiesField(ctx);
+                    //await SetTermSetForTaxonomyField(ctx, "Cities", "city-NguyenAnhTu");
+
+                    //// Add field “cities” to content type “CSOM Test content type” make sure don’t need update list
+                    //// but added field should be available in your list “CSOM test”
+                    //await AddSiteFieldToContentType(ctx, "CSOM Test Content Type", new List<string> { "Cities" });
+
+                    //// Add 3 list item to list “CSOM test” and set multi value to field “cities” 
                     //await AddNewCitiesItems(ctx);
-                    //await CreateListDocument(ctx, "Document Test", "Document Libaries");
-                    //await AddContentTypeToDocumentList(ctx);
+
+                    //// Create new List type Document lib name “Document Test” 
+                    //// add content type “CSOM Test content type” to this list
+                    //await CreateDocumentLibrary(ctx, "Document Test", "Document Libaries");
+                    //await AddContentTypeToList(ctx, "CSOM Test Content Type", "Document Test");
+
+                    //// Create Folder “Folder 1” in root of list “Document Test” 
+                    //// then create “Folder 2” inside “Folder 1”, 
                     //await AddFolder(ctx, "Document Test", "Folder 1");
-                    //await AddSubFolder(ctx, "Document Test", "Folder 1", "Folder 2");
-                    //await AddItemsInDocumentLib(ctx);
+                    //await AddSubFolder(ctx, "Document Test", "Document Test/Folder 1", "Folder 2");
+
+                    //// Create 3 list items in “Folder 2” with value “Folder test” in field “about”. 
+                    //// Create 2 flies in “Folder 2” with value “Stockholm” in field “cities”.
+                    //await AddItemsInDocumentLib(ctx, "Document Test", "Document Test/Folder 1/Folder 2");
+                    //await AddItemsWithCitiesInDocumentLib(ctx, "Document Test", "Document Test/Folder 1/Folder 2");
 
                     //List<string> folderList = new List<string> { "Folder_Test_1", "Folder_Test_2", "Folder_Test_3" };
                     //await AddFoldersInDocumentLib(ctx, "Document Test", "Folder 1", "Folder 2", folderList);
-                    //await GetAllListItemInFolder(ctx, "Document Test", "Folder 1", "Folder 2");
 
-                    await UploadFile(ctx, "Document Test", "D:/download.png");
+                    //// Write CAML get all list item just in “Folder 2” and have value “Stockholm” in “cities” field
+                    await GetAllListItemInFolder(ctx, "Document Test", "Document Test/Folder 1/Folder 2");
+                    // Create List Item in “Document Test” by upload a file Document.docx 
+                    await UploadFile(ctx, "Document Test", "D:/Document.docx");
+
                     Console.WriteLine($"Site {ctx.Web.Title}");
                 }
                 Console.WriteLine($"Press Any Key To Stop!");
@@ -153,76 +208,87 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task CreateContentTypes(ClientContext ctx)
+        private static async Task CreateContentTypes(ClientContext ctx, string ctName, string grpName)
         {
             //Create Content Types
             ctx.Site.RootWeb.ContentTypes.Add(new ContentTypeCreationInformation
             {
-                Name = "CSOM Test Content Type",
-                Group = "CSOM Test Content Types"
+                Name = ctName,
+                Group = grpName
             });
             await ctx.ExecuteQueryAsync();
+
+
+        }
+
+        private static async Task AddSiteFieldToContentType(ClientContext ctx, string ctName, List<string> fieldList)
+        {
             // Get all the content types from current site
             ContentTypeCollection contentTypeCollection = ctx.Web.ContentTypes;
             // Load content type collection
             ctx.Load(contentTypeCollection);
             await ctx.ExecuteQueryAsync();
+
             // Give content type name over here
-            ContentType targetContentType = (from contentType in contentTypeCollection where contentType.Name == "CSOM Test Content Type" select contentType).FirstOrDefault();
+            ContentType targetContentType = (from contentType in contentTypeCollection where contentType.Name == ctName select contentType).FirstOrDefault();
             ctx.Load(targetContentType);
             await ctx.ExecuteQueryAsync();
-            Field aboutField = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle("About");
-            Field cityField = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle("City");
-            targetContentType.FieldLinks.Add(new FieldLinkCreationInformation
+
+            // Add Field to Content Type
+            foreach (string fieldName in fieldList)
             {
-                Field = aboutField
-            });
-            targetContentType.FieldLinks.Add(new FieldLinkCreationInformation
-            {
-                Field = cityField,
-            });
+                Field field = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle(fieldName);
+                targetContentType.FieldLinks.Add(new FieldLinkCreationInformation
+                {
+                    Field = field
+                });
+            }
+
             targetContentType.Update(true);
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task AddContentTypeToList(ClientContext ctx)
+        private static async Task AddContentTypeToList(ClientContext ctx, string ctName, string listName)
         {
             // Get all the content types from current site
             ContentTypeCollection contentTypeCollection = ctx.Site.RootWeb.ContentTypes;
             ctx.Load(contentTypeCollection);
             await ctx.ExecuteQueryAsync();
+
             //Add Content Type To List
-            ContentType targetContentType = (from contentType in contentTypeCollection where contentType.Name == "CSOM Test Content Type" select contentType).FirstOrDefault();
-            List targetList = ctx.Web.Lists.GetByTitle("CSOM Test");
+            ContentType targetContentType = (from contentType in contentTypeCollection where contentType.Name == ctName select contentType).FirstOrDefault();
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
             targetList.ContentTypes.AddExistingContentType(targetContentType);
             targetList.Update();
             ctx.Web.Update();
             await ctx.ExecuteQueryAsync();
+
+        }
+
+        private static async Task SetDefaultContentTypeInList(ClientContext ctx, string ctName, string listName)
+        {
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
             //Load current Content Types in List
             var currentCtOrder = targetList.ContentTypes;
             ctx.Load(currentCtOrder, coll => coll.Include(
                                     ct => ct.Name,
                                     ct => ct.Id));
             await ctx.ExecuteQueryAsync();
-            IList<ContentTypeId> reverseOrder = (from ct in currentCtOrder where ct.Name.Equals("CSOM Test Content Type", StringComparison.OrdinalIgnoreCase) select ct.Id).ToList();
+
+            IList<ContentTypeId> reverseOrder = (from ct in currentCtOrder where ct.Name.Equals(ctName, StringComparison.OrdinalIgnoreCase) select ct.Id).ToList();
             targetList.RootFolder.UniqueContentTypeOrder = reverseOrder;
             targetList.RootFolder.Update();
             targetList.Update();
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task AddItemToList(ClientContext ctx)
+        private static async Task AddItemToList(ClientContext ctx, string listName, List<ItemList> itemList)
         {
-            //Create Item List
-            List<ItemList> csomList = new List<ItemList>();
-            csomList.Add(new ItemList("Test 1", "About 1", "City 1"));
-            csomList.Add(new ItemList("Test 2", "About 2", "City 2"));
-            csomList.Add(new ItemList("Test 3", "About 3", "City 3"));
-            csomList.Add(new ItemList("Test 4", "About 4", "City 4"));
-            csomList.Add(new ItemList("Test 5", "About 5", "City 5"));
-            List targetList = ctx.Web.Lists.GetByTitle("CSOM Test");
+            // Get List
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
+
             // Get Target List
-            foreach (var item in csomList)
+            foreach (var item in itemList)
             {
                 ListItemCreationInformation iteminfo = new ListItemCreationInformation();
                 ListItem newListItem = targetList.AddItem(iteminfo);
@@ -235,56 +301,52 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task UpdateAboutField(ClientContext ctx)
+        private static async Task UpdateDefaultValueFieldTypeText(ClientContext ctx, string fieldName, string defaultValue)
         {
-            Field aboutField = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle("About");
-            aboutField.DefaultValue = "about default";
+            Field aboutField = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle(fieldName);
+            aboutField.DefaultValue = defaultValue;
             aboutField.UpdateAndPushChanges(true);
             await ctx.ExecuteQueryAsync();
-            AddTwoNewItems(ctx);
         }
 
-        private static async Task UpdateCityField(ClientContext ctx)
+        private static async Task SetTermSetForTaxonomyField(ClientContext ctx, string fieldName, string termSetName)
         {
+            // Get Field
+            Field field = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle(fieldName);
+
             Guid termStoreId = Guid.Empty;
             Guid termSetId = Guid.Empty;
-            GetTaxonomyFieldInfo(ctx, out termStoreId, out termSetId);
-
-            Field cityField = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle("City");
+            GetTaxonomyFieldInfo(ctx, termSetName, out termStoreId, out termSetId); // passing termStoreId and termSetId 
 
             // Retrieve as Taxonomy Field - Add Term Set to Taxonomy Field
-            TaxonomyField taxonomyField = ctx.CastTo<TaxonomyField>(cityField);
+            TaxonomyField taxonomyField = ctx.CastTo<TaxonomyField>(field);
             taxonomyField.SspId = termStoreId;
             taxonomyField.TermSetId = termSetId;
             taxonomyField.TargetTemplate = String.Empty;
             taxonomyField.AnchorId = Guid.Empty;
             taxonomyField.Update();
             await ctx.ExecuteQueryAsync();
+        }
 
-            //Get All Terms
-            //// Get the TaxonomySession
-            //TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
-            //// Get the term store by name
-            //TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
-            //// Get the term group by Name
-            //TermGroup termGroup = termStore.Groups.GetByName("CSOM-Test");
-            //// Get the term set by Name
-            //TermSet termSet = termGroup.TermSets.GetByName("city-NguyenAnhTu");
+        private static async Task SetDefaultValueForTaxonomyField(ClientContext ctx, string fieldName, string termGroup, string termSet, string termName)
+        {
+            // Get Field
+            Field cityField = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle(fieldName);
+            TaxonomyField taxonomyField = ctx.CastTo<TaxonomyField>(cityField);
 
-            TermCollection terms = await CsomTermSetAsync(ctx, "CSOM-Test", "city-NguyenAnhTu");
-            var term = terms.GetByName("Ho Chi Minh");
+            //Load Term for TaxonomyField
+            TermCollection terms = await CsomTermSetAsync(ctx, termGroup, termSet);
+            var term = terms.GetByName(termName);
             ctx.Load(term);
             await ctx.ExecuteQueryAsync();
 
-            //Set Default Value
-            TaxonomyFieldValue defaultValue = new TaxonomyFieldValue();
-            defaultValue.WssId = -1;
-            defaultValue.Label = term.Name;
-            // GUID should be stored lowercase, otherwise it will not work in Office 2010
-            defaultValue.TermGuid = term.Id.ToString().ToLower();
-
             // Get the Validated String for the taxonomy value
-            var validatedValue = taxonomyField.GetValidatedString(defaultValue);
+            var validatedValue = taxonomyField.GetValidatedString(new TaxonomyFieldValue
+            {
+                WssId = -1,
+                Label = term.Name,
+                TermGuid = term.Id.ToString().ToLower()
+            });
             await ctx.ExecuteQueryAsync();
 
             // Set the selected default value for the site column
@@ -292,8 +354,6 @@ namespace ConsoleCSOM
             taxonomyField.UserCreated = false;
             taxonomyField.UpdateAndPushChanges(true);
             await ctx.ExecuteQueryAsync();
-
-            AddTwoNewItems(ctx);
         }
 
         private static void AddTwoNewItems(ClientContext ctx)
@@ -310,14 +370,14 @@ namespace ConsoleCSOM
             ctx.ExecuteQuery();
         }
 
-        private static void GetTaxonomyFieldInfo(ClientContext ctx, out Guid termStoreId, out Guid termSetId)
+        private static void GetTaxonomyFieldInfo(ClientContext ctx, string termSetName, out Guid termStoreId, out Guid termSetId)
         {
             termStoreId = Guid.Empty;
             termSetId = Guid.Empty;
 
             TaxonomySession session = TaxonomySession.GetTaxonomySession(ctx);
             TermStore termStore = session.GetDefaultSiteCollectionTermStore();
-            TermSetCollection termSets = termStore.GetTermSetsByName("city-NguyenAnhTu", Constants.LCID_ENGLISH);
+            TermSetCollection termSets = termStore.GetTermSetsByName(termSetName, Constants.LCID_ENGLISH);
 
             ctx.Load(termSets, tsc => tsc.Include(ts => ts.Id));
             ctx.Load(termStore, ts => ts.Id);
@@ -406,9 +466,9 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task CAMLQueryAsync(ClientContext ctx)
+        private static async Task CAMLQueryAsync(ClientContext ctx, string listName)
         {
-            List targetList = ctx.Web.Lists.GetByTitle("CSOM Test");
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
 
             // get list items where field “about” is not “about default”
             // Remmember syntax must be correct
@@ -432,16 +492,17 @@ namespace ConsoleCSOM
             }
         }
 
-        private static async Task ListViewCSOMOrder(ClientContext ctx)
+        private static async Task ListViewCSOMOrder(ClientContext ctx, string listName, string viewTitle, string[] viewFields)
         {
-            List targetList = ctx.Web.Lists.GetByTitle("CSOM Test");
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
             ViewCollection viewCollection = targetList.Views;
             ctx.Load(viewCollection);
             View listView = viewCollection.Add(new ViewCreationInformation
             {
-                Title = "CSOM Order",
+                Title = viewTitle,
                 ViewTypeKind = ViewType.Html,
-                ViewFields = new String[] { "ID", "Title", "City", "About" },
+                ViewFields = viewFields,
+                //ViewFields = new String[] { "ID", "Title", "City", "About" },
                 Query = "<Where><Eq><FieldRef Name = 'City' /><Value Type = 'Text'>Ho Chi Minh</Value></Eq></Where><OrderBy><FieldRef Name = 'ID' Ascending='FALSE'/></OrderBy>",
             });
             ctx.ExecuteQuery();
@@ -449,22 +510,23 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task UpdateList(ClientContext ctx)
+        private static async Task UpdateListItem(ClientContext ctx, string listName)
         {
-            List targetList = ctx.Web.Lists.GetByTitle("CSOM Test");
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
             ListItemCollectionPosition itemPosition = null;
             while (true)
             {
-                CamlQuery camlQuery = new CamlQuery();
-                camlQuery.ListItemCollectionPosition = itemPosition;
-                camlQuery.ViewXml =
-                  @"<View> 
-                        <Query> 
-                           <Where><Eq><FieldRef Name='About' /><Value Type='Text'>about default</Value></Eq></Where> 
-                        </Query> 
-                        <RowLimit>2</RowLimit> 
-                     </View>";
-                ListItemCollection listItems = targetList.GetItems(camlQuery);
+                ListItemCollection listItems = targetList.GetItems(new CamlQuery
+                {
+                    ListItemCollectionPosition = itemPosition,
+                    ViewXml =
+                      @"<View> 
+                            <Query> 
+                               <Where><Eq><FieldRef Name='About' /><Value Type='Text'>about default</Value></Eq></Where> 
+                            </Query> 
+                            <RowLimit>2</RowLimit> 
+                         </View>"
+                });
                 ctx.Load(listItems);
                 ctx.ExecuteQuery();
                 itemPosition = listItems.ListItemCollectionPosition;
@@ -517,33 +579,6 @@ namespace ConsoleCSOM
         {
             ctx.Site.RootWeb.Fields.AddFieldAsXml("<Field DisplayName='Cities' Name='Cities' Group='CSOM Test Group' Type='TaxonomyFieldTypeMulti' Mult='TRUE' />", false, AddFieldOptions.AddFieldInternalNameHint);
             await ctx.ExecuteQueryAsync();
-
-            Guid termStoreId = Guid.Empty;
-            Guid termSetId = Guid.Empty;
-            GetTaxonomyFieldInfo(ctx, out termStoreId, out termSetId);
-
-            Field citiesField = ctx.Site.RootWeb.Fields.GetByInternalNameOrTitle("Cities");
-            // Retrieve as Taxonomy Field - Add Term Set to Taxonomy Field
-            TaxonomyField taxonomyField = ctx.CastTo<TaxonomyField>(citiesField);
-            taxonomyField.SspId = termStoreId;
-            taxonomyField.TermSetId = termSetId;
-            taxonomyField.TargetTemplate = String.Empty;
-            taxonomyField.AnchorId = Guid.Empty;
-            taxonomyField.Update();
-            await ctx.ExecuteQueryAsync();
-
-            ContentTypeCollection contentTypeCollection = ctx.Web.ContentTypes;
-            ctx.Load(contentTypeCollection);
-            await ctx.ExecuteQueryAsync();
-            ContentType targetContentType = (from contentType in contentTypeCollection where contentType.Name == "CSOM Test Content Type" select contentType).FirstOrDefault();
-            ctx.Load(targetContentType);
-            await ctx.ExecuteQueryAsync();
-            targetContentType.FieldLinks.Add(new FieldLinkCreationInformation
-            {
-                Field = citiesField
-            });
-            targetContentType.Update(true);
-            await ctx.ExecuteQueryAsync();
         }
 
         private static async Task AddNewCitiesItems(ClientContext ctx)
@@ -563,6 +598,7 @@ namespace ConsoleCSOM
                 txFieldValue.Label = term.Name;
                 termValues.Add("-1;#" + txFieldValue.Label + "|" + txFieldValue.TermGuid);
             }
+
             termValuesarrary = termValues.ToArray();
             string termValuesstring = string.Join(";#", termValuesarrary);
             Console.WriteLine(termValuesstring);
@@ -596,7 +632,7 @@ namespace ConsoleCSOM
             return terms;
         }
 
-        private static async Task CreateListDocument(ClientContext ctx, string listName, string description)
+        private static async Task CreateDocumentLibrary(ClientContext ctx, string listName, string description)
         {
             List newList = ctx.Web.Lists.Add(new ListCreationInformation()
             {
@@ -616,6 +652,7 @@ namespace ConsoleCSOM
             ContentTypeCollection contentTypeCollection = ctx.Site.RootWeb.ContentTypes;
             ctx.Load(contentTypeCollection);
             await ctx.ExecuteQueryAsync();
+
             //Add Content Type To List
             ContentType targetContentType = (from contentType in contentTypeCollection where contentType.Name == "CSOM Test Content Type" select contentType).FirstOrDefault();
             List targetList = ctx.Web.Lists.GetByTitle("Document Test");
@@ -645,38 +682,28 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task AddSubFolder(ClientContext ctx, string listName, string parentFolder, string subFolderName)
+        private static async Task AddSubFolder(ClientContext ctx, string listName, string urlFolder, string folderName)
         {
             List targetList = ctx.Web.Lists.GetByTitle(listName);
             ctx.Load(targetList);
             await ctx.ExecuteQueryAsync();
 
-            var folders = targetList.RootFolder.Folders;
-            ctx.Load(folders);
+            Folder parentFolder = ctx.Web.GetFolderByServerRelativeUrl(ctx.Web.ServerRelativeUrl + urlFolder);
+            parentFolder.Folders.Add(folderName);
+            parentFolder.Update();
             await ctx.ExecuteQueryAsync();
-
-            foreach (Folder folder in folders)
-            {
-                if (folder.Name == parentFolder)
-                {
-                    Folder resultFolder = folder.Folders.Add(subFolderName);
-                    resultFolder.Update();
-                    await ctx.ExecuteQueryAsync();
-                }
-            }
         }
 
-        private static async Task AddItemsInDocumentLib(ClientContext ctx)
+
+        private static async Task AddItemsInDocumentLib(ClientContext ctx, string listName, string urlFolder)
         {
             //Get List
-            List targetList = ctx.Web.Lists.GetByTitle("Document Test");
-            var folders = targetList.RootFolder.Folders;
-            ctx.Load(folders);
-            ctx.ExecuteQuery();
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
 
-            var targetFolder = folders.Where(x => x.Name == "Folder 1").FirstOrDefault().Folders;
+            Folder targetFolder = ctx.Web.GetFolderByServerRelativeUrl(ctx.Web.ServerRelativeUrl + urlFolder);
             ctx.Load(targetFolder);
-            ctx.ExecuteQuery();
+            await ctx.ExecuteQueryAsync();
+
             for (int i = 1; i <= 3; i++)
             {
                 FileCreationInformation createFile = new FileCreationInformation();
@@ -685,11 +712,11 @@ namespace ConsoleCSOM
                 string contentTxt = "Test Creating Content for txt File";
                 byte[] toBytes = Encoding.ASCII.GetBytes(contentTxt);
                 createFile.Content = toBytes;
-                File addedFile = targetFolder.Where(x => x.Name == "Folder 2").FirstOrDefault().Files.Add(createFile);
+                File addedFile = targetFolder.Files.Add(createFile);
                 ListItem item = addedFile.ListItemAllFields;
                 item["About"] = "Folder Test";
                 item.Update();
-                ctx.ExecuteQuery();
+                await ctx.ExecuteQueryAsync();
             }
         }
 
@@ -714,18 +741,12 @@ namespace ConsoleCSOM
             }
         }
 
-        private static async Task AddItemsWithCitiesInDocumentLib(ClientContext ctx)
+        private static async Task AddItemsWithCitiesInDocumentLib(ClientContext ctx, string listName, string urlFolder)
         {
             //Get List
-            List targetList = ctx.Web.Lists.GetByTitle("Document Test");
-            var folders = targetList.RootFolder.Folders;
-            ctx.Load(folders);
-            ctx.ExecuteQuery();
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
 
-            var targetFolder = folders.Where(x => x.Name == "Folder 1").FirstOrDefault().Folders;
-            ctx.Load(targetFolder);
-            ctx.ExecuteQuery();
-
+            // Get Term Stockholm
             TermCollection terms = await CsomTermSetAsync(ctx, "CSOM-Test", "city-NguyenAnhTu");
             Term stockHolmTerm = terms.GetByName("Stockholm");
             ctx.Load(stockHolmTerm);
@@ -738,6 +759,11 @@ namespace ConsoleCSOM
 
             Console.WriteLine(termValues);
 
+            // Get & Load Target Folder
+            Folder targetFolder = ctx.Web.GetFolderByServerRelativeUrl(ctx.Web.ServerRelativeUrl + urlFolder);
+            ctx.Load(targetFolder);
+            await ctx.ExecuteQueryAsync();
+
             for (int i = 1; i <= 2; i++)
             {
                 FileCreationInformation createFile = new FileCreationInformation();
@@ -746,7 +772,7 @@ namespace ConsoleCSOM
                 string contentTxt = "Test Creating Content for txt File";
                 byte[] toBytes = Encoding.ASCII.GetBytes(contentTxt);
                 createFile.Content = toBytes;
-                File addedFile = targetFolder.Where(x => x.Name == "Folder 2").FirstOrDefault().Files.Add(createFile);
+                File addedFile = targetFolder.Files.Add(createFile);
                 ListItem item = addedFile.ListItemAllFields;
                 item["Cities"] = termValues;
                 item.Update();
@@ -754,23 +780,32 @@ namespace ConsoleCSOM
             }
         }
 
-        private static async Task GetAllListItemInFolder(ClientContext ctx, string listName, string parentFolder, string targetFolder)
+        private static async Task GetAllListItemInFolder(ClientContext ctx, string listName, string urlFolder)
         {
-            List targetList = ctx.Web.Lists.GetByTitle("Document Test");
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
 
             var results = new Dictionary<string, IEnumerable<File>>();
             ctx.Load(targetList);
-            ctx.ExecuteQuery();
+            await ctx.ExecuteQueryAsync();
 
             var items = targetList.GetItems(new CamlQuery
             {
-                ViewXml = "<View Scope=\"RecursiveAll\"><Query><Where><Eq><FieldRef Name=\"FSObjType\" /><Value Type=\"Integer\">0</Value></Eq></Where></Query></View>",
-                FolderServerRelativeUrl = $"/sites/PrecioFishbone/{listName}/{parentFolder}/{targetFolder}"
+                ViewXml = @"<View Scope='RecursiveAll'>
+                                <Query>
+                                    <Where>
+                                        <Eq>
+                                            <FieldRef Name='Cities'/>
+                                            <Value Type='TaxonomyFieldTypeMulti'>Stockholm</Value>
+                                        </Eq>
+                                    </Where>
+                                </Query>
+                            </View>",
+                FolderServerRelativeUrl = $"/sites/PrecioFishbone/{urlFolder}"
             });
+
             ctx.Load(items, icol => icol.Include(i => i.File));
             results[targetList.Title] = items.Select(i => i.File);
-
-            ctx.ExecuteQuery();
+            await ctx.ExecuteQueryAsync();
 
             //Print results
             foreach (var result in results)
@@ -780,7 +815,6 @@ namespace ConsoleCSOM
                     Console.WriteLine("File: {0}", file.Name);
                 }
             }
-
         }
 
         private static async Task UploadFile(ClientContext ctx, string listName, string fileUpload)
@@ -805,6 +839,7 @@ namespace ConsoleCSOM
             targetList.Update();
             await ctx.ExecuteQueryAsync();
         }
+
 
     }
 }
