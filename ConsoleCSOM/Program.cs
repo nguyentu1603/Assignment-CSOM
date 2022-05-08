@@ -116,10 +116,16 @@ namespace ConsoleCSOM
                     //List<string> folderList = new List<string> { "Folder_Test_1", "Folder_Test_2", "Folder_Test_3" };
                     //await AddFoldersInDocumentLib(ctx, "Document Test", "Folder 1", "Folder 2", folderList);
 
-                    //// Write CAML get all list item just in “Folder 2” and have value “Stockholm” in “cities” field
-                    await GetAllListItemInFolder(ctx, "Document Test", "Document Test/Folder 1/Folder 2");
-                    // Create List Item in “Document Test” by upload a file Document.docx 
-                    await UploadFile(ctx, "Document Test", "D:/Document.docx");
+                    ////// Write CAML get all list item just in “Folder 2” and have value “Stockholm” in “cities” field
+                    //await GetAllListItemInFolder(ctx, "Document Test", "Document Test/Folder 1/Folder 2");
+                    //// Create List Item in “Document Test” by upload a file Document.docx 
+                    //await UploadFile(ctx, "Document Test", "D:/Document.docx");
+
+                    //// Create View “only show folder structure, and set this view as default
+                    //await ListViewDocumentList(ctx, "Document Test", "Folders");
+
+                    //// Write code to load User from user email or name.
+                    await LoadUser(ctx, "Tú Nguyễn");
 
                     Console.WriteLine($"Site {ctx.Web.Title}");
                 }
@@ -502,7 +508,6 @@ namespace ConsoleCSOM
                 Title = viewTitle,
                 ViewTypeKind = ViewType.Html,
                 ViewFields = viewFields,
-                //ViewFields = new String[] { "ID", "Title", "City", "About" },
                 Query = "<Where><Eq><FieldRef Name = 'City' /><Value Type = 'Text'>Ho Chi Minh</Value></Eq></Where><OrderBy><FieldRef Name = 'ID' Ascending='FALSE'/></OrderBy>",
             });
             ctx.ExecuteQuery();
@@ -840,6 +845,37 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
+        //private static async Task ListViewDocumentList(ClientContext ctx, string listName, string viewTitle)
+        //{
+        //    List targetList = ctx.Web.Lists.GetByTitle(listName);
+        //    ViewCollection viewCollection = targetList.Views;
+        //    ctx.Load(viewCollection);
+        //    View listView = viewCollection.Add(new ViewCreationInformation
+        //    {
+        //        Title = viewTitle,
+        //        ViewTypeKind = ViewType.Html,
+        //        Query = @"<View Scope='RecursiveAll'> 
+        //                    <Query> 
+        //                        <Where>
+        //                            <Eq> 
+        //                                <FieldRef Name='Type' />
+        //                            </Eq>
+        //                        </Where>
+        //                    </Query>
+        //                </View>",
+        //    });
+        //    ctx.ExecuteQuery();
+        //    listView.Update();
+        //    await ctx.ExecuteQueryAsync();
+        //}
+
+        private static async Task LoadUser(ClientContext ctx, string user)
+        {
+            User currentUser = ctx.Web.EnsureUser(user);
+            ctx.Load(currentUser);
+            await ctx.ExecuteQueryAsync();
+            Console.WriteLine("Account Name: {0} \nEmail: {1} \nInformation : {2}", currentUser.Title, currentUser.Email, currentUser.LoginName);
+        }
 
     }
 }
