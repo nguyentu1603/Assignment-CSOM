@@ -34,13 +34,13 @@ namespace ConsoleCSOM
                     await ctx.ExecuteQueryAsync();
 
                     //// Create: a List name “CSOM Test”
-                    //await CreateGenericList(ctx, "CSOM Test");
+                    //await CreateGenericList(ctx, Constants.CSOMListTest);
 
                     //// Create: Term Set city-NguyenAnhTu and 2 Term Ho Chi Minh and Stockholm
                     //await CreateTermGroup(ctx, "CSOM-Test");
-                    //await CreateTermSet(ctx, "CSOM-Test", "city-NguyenAnhTu");
-                    //List<string> termList = new List<string> { "Ho Chi Minh", "Stockholm" };
-                    //await CreateTerm(ctx, "CSOM-Test", "city-NguyenAnhTu", termList);
+                    //await CreateTermSet(ctx, "CSOM-Test", Constants.TermSet);
+                    //await CreateTerm(ctx, "CSOM-Test", Constants.TermSet, "Ho Chi Minh");
+                    //await CreateTerm(ctx, "CSOM-Test", Constants.TermSet, "Stockholm");
 
                     //// Create: SiteField About (Text) and City (Taxonomy Field)
                     //await CreateSiteField(ctx, "About", "About", "CSOM Test Group", "Text");
@@ -52,8 +52,8 @@ namespace ConsoleCSOM
                     //await AddSiteFieldToContentType(ctx, "CSOM Test Content Type", siteField);
 
                     //// Add: Content Type To List and Set Default Content Type
-                    //await AddContentTypeToList(ctx, "CSOM Test Content Type", "CSOM Test");
-                    //await SetDefaultContentTypeInList(ctx, "CSOM Test Content Type", "CSOM Test");
+                    //await AddContentTypeToList(ctx, "CSOM Test Content Type", Constants.CSOMListTest);
+                    //await SetDefaultContentTypeInList(ctx, "CSOM Test Content Type", Constants.CSOMListTest);
 
                     //// Add: 5 Item To List
                     //List<ItemList> csomList = new List<ItemList>();
@@ -62,26 +62,26 @@ namespace ConsoleCSOM
                     //csomList.Add(new ItemList("Test 3", "About 3", "City 3"));
                     //csomList.Add(new ItemList("Test 4", "About 4", "City 4"));
                     //csomList.Add(new ItemList("Test 5", "About 5", "City 5"));
-                    //await AddItemToList(ctx, "CSOM Test", csomList);
+                    //await AddItemToList(ctx, Constants.CSOMListTest, csomList);
 
                     //// Update: Set Default Value "about default" for About
                     //await UpdateDefaultValueFieldTypeText(ctx, "About", "about default");
                     //AddTwoNewItems(ctx);
 
                     //// Set Default Value "Ho Chi Minh" for City
-                    //await SetTermSetForTaxonomyField(ctx, "City", "city-NguyenAnhTu");
-                    //await SetDefaultValueForTaxonomyField(ctx, "City", "CSOM-Test", "city-NguyenAnhTu", "Ho Chi Minh");
+                    //await SetTermSetForTaxonomyField(ctx, "City", Constants.TermSet);
+                    //await SetDefaultValueForTaxonomyField(ctx, "City", "CSOM-Test", Constants.TermSet, "Ho Chi Minh");
                     //AddTwoNewItems(ctx);
 
                     //// CAML Query to get list items where field “about” is not “about default”
-                    //await CAMLQueryAsync(ctx, "CSOM Test");
+                    //await CAMLQueryAsync(ctx, Constants.CSOMListTest);
 
                     //// Create: List View Order Newest Items where City is Ho Chi Minh, View Fields: Id, Name, City, About
                     //string[] viewFields = new String[] { "ID", "Title", "City", "About" };
-                    //await ListViewCSOMOrder(ctx, "CSOM Test", "CSOM Order", viewFields);
+                    //await ListViewCSOMOrder(ctx, Constants.CSOMListTest, "CSOM Order", viewFields);
 
-                    // Update: Update every 2 items every time and Update field "about" which have value "about default" to "Update Script"
-                    //await UpdateListItem(ctx, "CSOM Test");
+                    ////Update: Update every 2 items every time and Update field "about" which have value "about default" to "Update Script"
+                    //await UpdateListItem(ctx, Constants.CSOMListTest);
 
                     //// Create new field “author” type people in list “CSOM Test”
                     //// then migrate all list items to set user admin to field “CSOM Test Author”
@@ -89,7 +89,7 @@ namespace ConsoleCSOM
 
                     //// Create Taxonomy Field which allow multi values, with name “cities” map to your termset.
                     //await CreateCitiesField(ctx);
-                    //await SetTermSetForTaxonomyField(ctx, "Cities", "city-NguyenAnhTu");
+                    //await SetTermSetForTaxonomyField(ctx, "Cities", Constants.TermSet);
 
                     //// Add field “cities” to content type “CSOM Test content type” make sure don’t need update list
                     //// but added field should be available in your list “CSOM test”
@@ -100,32 +100,32 @@ namespace ConsoleCSOM
 
                     //// Create new List type Document lib name “Document Test” 
                     //// add content type “CSOM Test content type” to this list
-                    //await CreateDocumentLibrary(ctx, "Document Test", "Document Libaries");
-                    //await AddContentTypeToList(ctx, "CSOM Test Content Type", "Document Test");
+                    //await CreateDocumentLibrary(ctx, Constants.DocumentLibTest, "Document Libaries");
+                    //await AddContentTypeToList(ctx, "CSOM Test Content Type", Constants.DocumentLibTest);
 
                     //// Create Folder “Folder 1” in root of list “Document Test” 
                     //// then create “Folder 2” inside “Folder 1”, 
-                    //await AddFolder(ctx, "Document Test", "Folder 1");
-                    //await AddSubFolder(ctx, "Document Test", "Document Test/Folder 1", "Folder 2");
+                    //await AddFolder(ctx, Constants.DocumentLibTest, "Folder 1");
+                    //await AddSubFolder(ctx, Constants.DocumentLibTest, "Document Test/Folder 1", "Folder 2");
 
                     //// Create 3 list items in “Folder 2” with value “Folder test” in field “about”. 
                     //// Create 2 flies in “Folder 2” with value “Stockholm” in field “cities”.
-                    //await AddItemsInDocumentLib(ctx, "Document Test", "Document Test/Folder 1/Folder 2");
-                    //await AddItemsWithCitiesInDocumentLib(ctx, "Document Test", "Document Test/Folder 1/Folder 2");
+                    //await AddItemsInDocumentLib(ctx, Constants.DocumentLibTest, "Document Test/Folder 1/Folder 2");
+                    //await AddItemsWithCitiesInDocumentLib(ctx, Constants.DocumentLibTest, "Document Test/Folder 1/Folder 2");
 
-                    //List<string> folderList = new List<string> { "Folder_Test_1", "Folder_Test_2", "Folder_Test_3" };
-                    //await AddFoldersInDocumentLib(ctx, "Document Test", "Folder 1", "Folder 2", folderList);
+                    //List<string> folderList = new List<string> { "Folder_Test_7", "Folder_Test_8", "Folder_Test_9" };
+                    //await AddFoldersInDocumentLib(ctx, Constants.DocumentLibTest, "Document Test/Folder 1/Folder 2", folderList);
 
-                    ////// Write CAML get all list item just in “Folder 2” and have value “Stockholm” in “cities” field
-                    //await GetAllListItemInFolder(ctx, "Document Test", "Document Test/Folder 1/Folder 2");
-                    //// Create List Item in “Document Test” by upload a file Document.docx 
-                    //await UploadFile(ctx, "Document Test", "D:/Document.docx");
+                    //// Write CAML get all list item just in “Folder 2” and have value “Stockholm” in “cities” field
+                    await GetAllListItemInFolder(ctx, Constants.DocumentLibTest, "Document Test/Folder 1/Folder 2");
+                    ////Create List Item in “Document Test” by upload a file Document.docx
+                    //await UploadFile(ctx, Constants.DocumentLibTest, "D:/Document.docx");
 
                     //// Create View “only show folder structure, and set this view as default
-                    //await ListViewDocumentList(ctx, "Document Test", "Folders");
+                    //await ListViewDocumentList(ctx, Constants.DocumentLibTest, "Folders");
 
                     //// Write code to load User from user email or name.
-                    await LoadUser(ctx, "Tú Nguyễn");
+                    //await LoadUser(ctx, "Tú Nguyễn");
 
                     Console.WriteLine($"Site {ctx.Web.Title}");
                 }
@@ -181,36 +181,29 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        private static async Task CreateTerm(ClientContext ctx, string groupName, string setName, List<string> termList)
+        private static async Task CreateTerm(ClientContext ctx, string groupName, string setName, string termName)
         {
             TaxonomySession taxonomySession = TaxonomySession.GetTaxonomySession(ctx);
             TermStore termStore = taxonomySession.GetDefaultSiteCollectionTermStore();
             //Get Term Group & Term Set
             TermGroup termGroup = termStore.Groups.GetByName(groupName);
             TermSet termSet = termGroup.TermSets.GetByName(setName);
+
             //Create new Term
-            foreach (string termName in termList)
-            {
-                Term newTerm = termSet.CreateTerm(termName, Constants.LCID_ENGLISH, Guid.NewGuid());
-            }
+            Console.Write("Create Term: {0}", termName);
+            Term newTerm = termSet.CreateTerm(termName, Constants.LCID_ENGLISH, Guid.NewGuid());
+
             // Execute the query to the server.
             await ctx.ExecuteQueryAsync();
         }
-
-        //private static async Task CreateSiteField(ClientContext ctx, string displayName, string groupName, string type)
-        //{
-        //    //Create About (Text) Field
-        //    ctx.Site.RootWeb.Fields.AddFieldAsXml("<Field DisplayName='About' Name='About' Group='CSOM Test Group' Type='Text' />", false, AddFieldOptions.AddFieldInternalNameHint);
-        //    //Create City (TaxonomyFieldType) Field
-        //    ctx.Site.RootWeb.Fields.AddFieldAsXml("<Field DisplayName='City' Name='City' Group='CSOM Test Group' Type='TaxonomyFieldType' />", false, AddFieldOptions.AddFieldInternalNameHint);
-        //    await ctx.ExecuteQueryAsync();
-        //}
 
         private static async Task CreateSiteField(ClientContext ctx, string displayName, string name, string groupName, string type)
         {
             // For Text Field Type is Text
             // For Taxonomy Field is TaxonomyFieldType
+            Console.Write("Create Field: {0} Type: {1}", displayName, type);
             ctx.Site.RootWeb.Fields.AddFieldAsXml($"<Field DisplayName='{displayName}' Name='{name}' Group='{groupName}' Type='{type}' />", false, AddFieldOptions.AddFieldInternalNameHint);
+
             await ctx.ExecuteQueryAsync();
         }
 
@@ -223,8 +216,6 @@ namespace ConsoleCSOM
                 Group = grpName
             });
             await ctx.ExecuteQueryAsync();
-
-
         }
 
         private static async Task AddSiteFieldToContentType(ClientContext ctx, string ctName, List<string> fieldList)
@@ -268,7 +259,6 @@ namespace ConsoleCSOM
             targetList.Update();
             ctx.Web.Update();
             await ctx.ExecuteQueryAsync();
-
         }
 
         private static async Task SetDefaultContentTypeInList(ClientContext ctx, string ctName, string listName)
@@ -483,7 +473,12 @@ namespace ConsoleCSOM
                 ViewXml =
                      @"<View> 
                              <Query> 
-                                 <Where><Neq><FieldRef Name='About' /><Value Type='Text'>about default</Value></Neq></Where> 
+                                <Where>
+                                    <Neq>
+                                        <FieldRef Name='About' />
+                                        <Value Type='Text'>about default</Value>
+                                    </Neq>
+                                </Where> 
                              </Query> 
                              <RowLimit>100</RowLimit> 
                      </View>",
@@ -725,20 +720,17 @@ namespace ConsoleCSOM
             }
         }
 
-        private static async Task AddFoldersInDocumentLib(ClientContext ctx, string docLibName, string parentFolder, string subFolder, List<string> folderNames)
+        private static async Task AddFoldersInDocumentLib(ClientContext ctx, string docLibName, string urlFolder, List<string> folderNames)
         {
             //Get List
             List targetList = ctx.Web.Lists.GetByTitle(docLibName);
-            var folders = targetList.RootFolder.Folders;
-            ctx.Load(folders);
-            ctx.ExecuteQuery();
 
-            var targetFolder = folders.Where(x => x.Name == parentFolder).FirstOrDefault().Folders;
+            var targetFolder = ctx.Web.GetFolderByServerRelativeUrl(ctx.Web.ServerRelativeUrl + urlFolder);
             ctx.Load(targetFolder);
             ctx.ExecuteQuery();
             foreach (var item in folderNames)
             {
-                Folder resultFolder = targetFolder.Where(x => x.Name == subFolder).FirstOrDefault().Folders.Add(item);
+                Folder resultFolder = targetFolder.Folders.Add(item);
                 ListItem folder = resultFolder.ListItemAllFields;
                 folder["About"] = "Folder Test";
                 folder.Update();
@@ -845,29 +837,29 @@ namespace ConsoleCSOM
             await ctx.ExecuteQueryAsync();
         }
 
-        //private static async Task ListViewDocumentList(ClientContext ctx, string listName, string viewTitle)
-        //{
-        //    List targetList = ctx.Web.Lists.GetByTitle(listName);
-        //    ViewCollection viewCollection = targetList.Views;
-        //    ctx.Load(viewCollection);
-        //    View listView = viewCollection.Add(new ViewCreationInformation
-        //    {
-        //        Title = viewTitle,
-        //        ViewTypeKind = ViewType.Html,
-        //        Query = @"<View Scope='RecursiveAll'> 
-        //                    <Query> 
-        //                        <Where>
-        //                            <Eq> 
-        //                                <FieldRef Name='Type' />
-        //                            </Eq>
-        //                        </Where>
-        //                    </Query>
-        //                </View>",
-        //    });
-        //    ctx.ExecuteQuery();
-        //    listView.Update();
-        //    await ctx.ExecuteQueryAsync();
-        //}
+        private static async Task ListViewDocumentList(ClientContext ctx, string listName, string viewTitle)
+        {
+            List targetList = ctx.Web.Lists.GetByTitle(listName);
+            ViewCollection viewCollection = targetList.Views;
+            ctx.Load(viewCollection);
+            View listView = viewCollection.Add(new ViewCreationInformation
+            {
+                Title = viewTitle,
+                ViewTypeKind = ViewType.Html,
+                SetAsDefaultView = true,
+                Query = @"
+                        <Where>
+                            <Eq>
+                                <FieldRef Name='FSObjType'/>
+                                <Value Type='Integer'>1</Value>
+                            </Eq>
+                        </Where>
+                        "
+            });
+            listView.Update();
+            ctx.ExecuteQuery();
+            await ctx.ExecuteQueryAsync();
+        }
 
         private static async Task LoadUser(ClientContext ctx, string user)
         {
