@@ -10,6 +10,7 @@ using ConsoleCSOM.Models;
 using System.Text;
 using System.IO;
 using File = Microsoft.SharePoint.Client.File;
+using Microsoft.SharePoint.Client.UserProfiles;
 
 namespace ConsoleCSOM
 {
@@ -33,7 +34,7 @@ namespace ConsoleCSOM
                     ctx.Load(ctx.Web);
                     await ctx.ExecuteQueryAsync();
 
-                    //// Create: a List name “CSOM Test”
+                    // Create: a List name “CSOM Test”
                     //await CreateGenericList(ctx, Constants.CSOMListTest);
 
                     //// Create: Term Set city-NguyenAnhTu and 2 Term Ho Chi Minh and Stockholm
@@ -117,7 +118,7 @@ namespace ConsoleCSOM
                     //await AddFoldersInDocumentLib(ctx, Constants.DocumentLibTest, "Document Test/Folder 1/Folder 2", folderList);
 
                     //// Write CAML get all list item just in “Folder 2” and have value “Stockholm” in “cities” field
-                    await GetAllListItemInFolder(ctx, Constants.DocumentLibTest, "Document Test/Folder 1/Folder 2");
+                    //await GetAllListItemInFolder(ctx, Constants.DocumentLibTest, "Document Test/Folder 1/Folder 2");
                     ////Create List Item in “Document Test” by upload a file Document.docx
                     //await UploadFile(ctx, Constants.DocumentLibTest, "D:/Document.docx");
 
@@ -125,7 +126,7 @@ namespace ConsoleCSOM
                     //await ListViewDocumentList(ctx, Constants.DocumentLibTest, "Folders");
 
                     //// Write code to load User from user email or name.
-                    //await LoadUser(ctx, "Tú Nguyễn");
+                    await LoadUser(ctx, "Tú Nguyễn");
 
                     Console.WriteLine($"Site {ctx.Web.Title}");
                 }
@@ -822,7 +823,7 @@ namespace ConsoleCSOM
             List targetList = ctx.Web.Lists.GetByTitle(listName);
 
             // Prepare to upload
-            String fileName = System.IO.Path.GetFileName(fileUpload);
+            String fileName = Path.GetFileName(fileUpload);
             FileStream fileStream = System.IO.File.OpenRead(fileUpload);
 
             FileCreationInformation file = new FileCreationInformation();
@@ -867,6 +868,19 @@ namespace ConsoleCSOM
             ctx.Load(currentUser);
             await ctx.ExecuteQueryAsync();
             Console.WriteLine("Account Name: {0} \nEmail: {1} \nInformation : {2}", currentUser.Title, currentUser.Email, currentUser.LoginName);
+
+            //// Get the people manager instance and load current properties.
+            PeopleManager peopleManager = new PeopleManager(ctx);
+            PersonProperties personProperties = peopleManager.GetMyProperties();
+            ctx.Load(personProperties);
+            ctx.ExecuteQuery();
+
+            // Output user profile properties to a text box.
+            foreach (var item in personProperties.UserProfileProperties)
+            {
+                Console.WriteLine(string.Format("{0} - {1}{2}", item.Key, item.Value, Environment.NewLine));
+            }
+
         }
 
     }
